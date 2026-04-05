@@ -1,20 +1,20 @@
-# Desarrollo de taller de Azure Function
+# Development of Azure Function workshop
 
 ## Daniel Alejandro Castro Escobar - A00398005
 
-### **1. Obtención del código fuente**
+### **1. Obtaining the source code**
 
-Inicialmente, se clona el repositorio de GitHub que contiene los archivos de configuración de Terraform. Esto permite obtener localmente las definiciones de infraestructura necesarias para el despliegue. El comando empleado es:
+Initially, the GitHub repository containing the Terraform configuration files is cloned. This allows obtaining locally the infrastructure definitions required for deployment. The command used is:
 
 ```bash
 git clone https://github.com/ChristianFlor/azfunction-tf.git
-```
+````
 
 ![Clonación del repositorio](images/Image1.png)
 
-### **2. Acceso al directorio de trabajo**
+### **2. Accessing the working directory**
 
-Una vez clonado el repositorio, se navega al directorio que alberga el archivo principal de Terraform y los archivos complementarios, para que los comandos de Terraform se ejecuten en el contexto correcto.
+Once the repository is cloned, the directory that contains the main Terraform file and the complementary files is accessed, so that Terraform commands are executed in the correct context.
 
 ```bash
 cd D:\Documentos\Universidad\Semestre 8\Plataformas II\VM Terraform>
@@ -22,9 +22,9 @@ cd D:\Documentos\Universidad\Semestre 8\Plataformas II\VM Terraform>
 
 ![Acceso al directorio](images/Image2.png)
 
-### **3. Inicialización de Terraform**
+### **3. Terraform initialization**
 
-Se ejecuta el comando `terraform init` con el fin de preparar el entorno de trabajo. Este comando descarga los proveedores necesarios y configura el backend para el estado de Terraform.
+The `terraform init` command is executed in order to prepare the working environment. This command downloads the necessary providers and configures the backend for Terraform state.
 
 ```bash
 terraform init
@@ -32,67 +32,67 @@ terraform init
 
 ![Inicialización de Terraform](images/Image3.png)
 
-### **4. Despliegue inicial**
+### **4. Initial deployment**
 
-A continuación, se procede a ejecutar `terraform apply` para crear los recursos definidos. Durante la ejecución, Terraform solicita confirmación mostrando el plan de cambios. Es necesario responder afirmativamente (`yes`). Sin embargo, el despliegue falla debido a un error relacionado con la suscripción de Azure y la zona geográfica predeterminada.
+Next, `terraform apply` is executed to create the defined resources. During execution, Terraform requests confirmation by showing the change plan. It is necessary to respond affirmatively (`yes`). However, the deployment fails due to an error related to the Azure subscription and the default geographic region.
 
 ![Despliegue de la infraestructura](images/Image4.png)
 ![Respuesta afirmativa](images/Image5.png)
 ![Error de región](images/Image6.png)
 
-En este caso, el error se debe a que la región configurada por defecto en los archivos de variables no está habilitada para la suscripción de estudiante utilizada.
+In this case, the error occurs because the region configured by default in the variable files is not enabled for the student subscription being used.
 
 ```bash
 terraform apply
 ```
 
-### **5. Corrección de la región**
+### **5. Region correction**
 
-Para solucionar el error, se modifica la variable `location` en el archivo `variables.tf`, estableciendo la región East US 2 (`eastus2`), que es compatible con la suscripción de estudiante y posee la disponibilidad de servicios requerida.
+To solve the error, the `location` variable in the `variables.tf` file is modified, setting the East US 2 region (`eastus2`), which is compatible with the student subscription and has the required service availability.
 
 ![Clonación del repositorio](images/Image7.png)
 
-Tras este ajuste, se repite el comando:
+After this adjustment, the command is executed again:
 
 ```bash
 terraform apply
 ```
 
-Ahora sí permite completar exitosamente la creación de la infraestructura.
+Now it successfully completes the infrastructure creation.
 
-### **6. Obtención de URL del servicio desplegado**
+### **6. Obtaining the deployed service URL**
 
-Al finalizar el despliegue, Terraform muestra en la salida los valores definidos en `outputs.tf`. Entre ellos, se encuentra la URL pública del recurso creado, que permite acceder al servicio en ejecución.
+At the end of the deployment, Terraform displays in the output the values defined in `outputs.tf`. Among them is the public URL of the created resource, which allows access to the running service.
 
 ![Obtención de URL](images/Image8.png)
 
-### **7. Verificación del funcionamiento de la aplicación**
+### **7. Verifying application functionality**
 
-Al acceder mediante un navegador a la URL, se observa un mensaje indicando que la función HTTP se había ejecutado correctamente:
+When accessing the URL through a browser, a message is displayed indicating that the HTTP function executed successfully:
 
-> "Esta función HTTP se ejecutó correctamente. Pase un nombre en la cadena de consulta o en el cuerpo de la solicitud para obtener una respuesta personalizada."
+> "This HTTP function was executed successfully. Pass a name in the query string or in the request body to get a personalized response."
 
-Así se comprueba que el recurso de tipo Function App está operando y responde a peticiones HTTP.
+This confirms that the Function App resource is operating and responding to HTTP requests.
 
 ![Comprobación de funcionamiento](images/Image9.png)
 
-### **8. Inspección en Azure Portal**
+### **8. Inspection in Azure Portal**
 
-Se ingresa al portal de Azure y se localiza el grupo de recursos creado, cuyo nombre fue definido en la configuración.
+The Azure portal is accessed and the created resource group is located, whose name was defined in the configuration.
 
 ![Resource Group creado](images/Image10.png)
 
-Dentro de este grupo se observan todos los recursos generados automáticamente por Terraform:
+Within this group, all the resources automatically generated by Terraform can be observed:
 
-- Storage Account  
-- App Service Plan  
-- Function App  
+* Storage Account
+* App Service Plan
+* Function App
 
-Esto evidencia que la infraestructura desplegada coincide con la definida en el código.
+This demonstrates that the deployed infrastructure matches what was defined in the code.
 
-### **9. Acceso al dominio de la Function App**
+### **9. Access to the Function App domain**
 
-Desde la página de la Function App en el portal, se accede a su dominio predeterminado, comprobando nuevamente que la aplicación está disponible públicamente y responde como se espera.
+From the Function App page in the portal, its default domain is accessed, confirming again that the application is publicly available and responds as expected.
 
 ![Página de la Function App](images/Image11.png)
 ![Acceso a dominio predeterminado](images/Image12.png)
